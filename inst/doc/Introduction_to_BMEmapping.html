@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to BMEmapping</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to BMEmapping</h1>
+
+
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The Bayesian Maximum Entropy (BME) framework offers a robust and
+versatile approach for space-time data analysis and uncertainty
+quantification. By integrating principles from Bayesian statistics and
+the maximum entropy formalism, BME enables the construction of optimal
+estimates for spatial or spatiotemporal processes in the presence of
+both precise (hard) and imprecise (soft) data. While hard data
+correspond to exact point-value measurements, soft data may take the
+flexible forms of intervals, probability distributions, or qualitative
+descriptors, making BME particularly well-suited for complex real-world
+datasets.</p>
+<p>The <strong>BMEmapping</strong> R package provides a user-friendly
+implementation of core BME methodologies, facilitating geostatistical
+modeling, prediction, and data fusion. It allows for a systematic
+integration of heterogeneous data sources, incorporates prior knowledge,
+and supports variogram-based spatial modeling—essential tools for
+accurate and interpretable spatial interpolation.</p>
+<p>Specifically, <strong>BMEmapping</strong> is designed to perform
+spatial interpolation at unobserved locations using both hard and
+soft-interval data. This vignette introduces the fundamental
+functionality of the package and guides users through its basic
+usage.</p>
+<p>To begin, load the package with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(BMEmapping)</span></code></pre></div>
+</div>
+<div id="main-functions" class="section level2">
+<h2>Main Functions</h2>
+<p>The main functions available in <strong>BMEmapping</strong>
+include:</p>
+<p><code>prob_zk</code> - computes and optionally plots the posterior
+density estimate at a single unobserved location.</p>
+<p><code>bme_predict</code> - predicts the posterior mean or mode and
+the associated variance at an unobserved location.</p>
+<p><code>bme_cv</code> - performs a cross-validation on the hard data to
+assess model performance.</p>
+<p><span class="math inline">\(~\)</span></p>
+</div>
+<div id="a-data-example" class="section level2">
+<h2>A Data Example</h2>
+<p>To introduce the functionality of <strong>BMEmapping</strong>, we
+will look at a modeling problem for estimating reliability-targeted snow
+loads in the state of Utah. The <code>utsnowload</code> data that is
+part of the package and can be accessed by the command</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">data</span>(<span class="st">&quot;utsnowload&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">head</span>(utsnowload)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a><span class="co">#&gt;   latitude longitude        hard lower upper</span></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co">#&gt; 1    40.44   -112.24  0.09696012    NA    NA</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co">#&gt; 2    39.94   -112.41  0.12258678    NA    NA</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; 3    37.51   -113.40 -0.02302358    NA    NA</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; 4    37.49   -113.85  0.50354362    NA    NA</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co">#&gt; 5    39.31   -109.53 -0.68611327    NA    NA</span></span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a><span class="co">#&gt; 6    40.72   -109.54 -0.53000397    NA    NA</span></span></code></pre></div>
+<p>The variables <code>latitude</code> and <code>longitude</code>
+represent the geographic coordinates of each location. The variable
+<code>hard</code> contains the values of precise (hard) data
+measurements, while <code>lower</code> and <code>upper</code> define the
+bounds of the soft interval data.</p>
+<p>Complete documentation for the <code>utsnowload</code> dataset can be
+accessed using the command</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>?utsnowload</span></code></pre></div>
+<div id="input-requirements" class="section level3">
+<h3>Input Requirements</h3>
+<p>The <strong>BMEmapping</strong> functions require the following input
+arguments:</p>
+<p><code>x</code>: A matrix specifying the geographic location(s) where
+predictions are to be made.</p>
+<p><code>ch</code>: A matrix or data frame containing the geographic
+coordinates of the hard data locations.</p>
+<p><code>cs</code>: A matrix or data frame containing the geographic
+coordinates of the soft-interval data locations.</p>
+<p><code>zh</code>: A vector of observed hard data values corresponding
+to the locations in <code>ch</code>.</p>
+<p><code>a</code>: A vector of lower bounds for the soft-interval data
+at locations <code>cs</code>.</p>
+<p><code>b</code>: A vector of upper bounds for the soft-interval data
+at locations <code>cs</code>.</p>
+</div>
+<div id="variography" class="section level3">
+<h3>Variography</h3>
+<p>Before using <code>BMEmapping</code>, the user must fit a variogram
+model to the spatial data. This step involves specifying the type of
+variogram and its associated parameters:</p>
+<ul>
+<li><p><code>model</code>: The variogram model type. Supported options
+are “exp” (Exponential), “sph” (Spherical), and “gau” (Gaussian). The
+appropriate model should be selected based on the spatial structure of
+the data.</p></li>
+<li><p><code>nugget</code>: The nugget effect of the variogram,
+representing measurement error or microscale variation.</p></li>
+<li><p><code>sill</code>: The sill of the variogram, indicating the
+plateau value of the semivariance.</p></li>
+<li><p><code>range</code>: The range (or effective range) of the
+variogram, representing the distance beyond which spatial correlation
+becomes negligible.</p></li>
+</ul>
+<p>A recommended tool for variogram modeling is the
+<strong>gstat</strong> package, which provides a robust suite of
+functions for fitting and analyzing variograms.</p>
+</div>
+<div id="optional-parameters" class="section level3">
+<h3>Optional Parameters</h3>
+<ul>
+<li><p><code>nhmax</code>: Maximum number of nearby hard data points to
+include in the integration process.</p></li>
+<li><p><code>nsmax</code>: Maximum number of nearby soft-interval data
+points to include in the integration process.</p></li>
+<li><p><code>zk_range</code>: A numeric vector specifying the range over
+which to evaluate the unobserved value at the estimation
+location.</p></li>
+<li><p><code>n</code>: An integer indicating the number of points at
+which to evaluate the posterior density over
+<code>zk_range</code>.</p></li>
+</ul>
+<p>The optional parameters are set to their default values. For further
+details, refer to the function documentation (e.g.,
+?<code>prob_zk</code>).</p>
+</div>
+<div id="bme-prediction" class="section level3">
+<h3>BME Prediction</h3>
+<p>Using the <code>utsnowload</code> dataset, you can prepare the
+necessary input variables as shown below. In this example, we designate
+the last 5 soft data locations (<strong>locations 228 to 232</strong>)
+as the <strong>prediction locations</strong>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># prediction location</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(utsnowload[<span class="dv">228</span><span class="sc">:</span><span class="dv">232</span>, <span class="fu">c</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;longitude&quot;</span>)])</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>x</span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt;     latitude longitude</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 228  40.3000 -111.2550</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 229  40.4447 -111.7075</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 230  40.7908 -111.4078</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 231  37.7064 -112.1456</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 232  40.9139 -111.3983</span></span></code></pre></div>
+<p>The hard and soft-interval data are assigned as</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># hard data locations</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>ch <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(utsnowload[<span class="dv">1</span><span class="sc">:</span><span class="dv">67</span>, <span class="fu">c</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;longitude&quot;</span>)]) </span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="co"># soft data locations</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>cs <span class="ot">&lt;-</span> <span class="fu">data.matrix</span>(utsnowload[<span class="dv">68</span><span class="sc">:</span><span class="dv">227</span>, <span class="fu">c</span>(<span class="st">&quot;latitude&quot;</span>, <span class="st">&quot;longitude&quot;</span>)])  </span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="co"># hard data values</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>zh <span class="ot">&lt;-</span> <span class="fu">c</span>(utsnowload[<span class="dv">1</span><span class="sc">:</span><span class="dv">67</span>, <span class="fu">c</span>(<span class="st">&quot;hard&quot;</span>)])</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="co"># lower bounds</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">c</span>(utsnowload[<span class="dv">68</span><span class="sc">:</span><span class="dv">227</span>, <span class="fu">c</span>(<span class="st">&quot;lower&quot;</span>)]) </span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="co"># upper bounds</span></span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">c</span>(utsnowload[<span class="dv">68</span><span class="sc">:</span><span class="dv">227</span>, <span class="fu">c</span>(<span class="st">&quot;upper&quot;</span>)]) </span></code></pre></div>
+<p>The variogram model and parameters are given as:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># variogram model and parameters</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="st">&quot;exp&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>nugget <span class="ot">&lt;-</span> <span class="fl">0.0953</span></span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>sill <span class="ot">&lt;-</span> <span class="fl">0.3639</span></span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>range <span class="ot">&lt;-</span> <span class="fl">1.0787</span></span></code></pre></div>
+<p>The <code>prob_zk</code> function accepts all the data and variogram
+input arguments explained above. The numerical estimation of the
+posterior density for prediction location is computed as</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">prob_zk</span>(x[<span class="dv">1</span>,], ch, cs, zh, a, b, model, nugget, sill, range, <span class="at">plot =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYAAAAGwCAMAAACXY0IgAAAArlBMVEUAAAAAADoAAGYAOjoAOmYAOpAAZrY6AAA6ADo6AGY6OgA6OmY6ZpA6ZrY6kLY6kNtmAABmADpmAGZmOgBmOjpmkLZmkNtmtrZmtttmtv+QOgCQZgCQZjqQkDqQkGaQtpCQttuQtv+Q29uQ2/+2ZgC2Zjq2ZpC2kDq227a229u22/+2/9u2///bkDrbkGbbtmbbtpDb29vb/9vb////tmb/25D/27b//7b//9v////eDIJPAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAM5UlEQVR4nO2da2MjNxWG5W3ilKXUgeVSh0KBuECXDgvESez//8fQZcYeOx5npDnSK2ne58PGa4/OOdYzd0u22hMoCl3A3KEAMBQAhgLAUAAYCgBDAWAoAAwFgKEAMBQAhgLAUAAYCgBDAWAoAAwFgKEAMBQAhgLAUAAYCgBDAWAoAAwFgKEAMBQAhgLAUAAYCgBDAWAoAEw5AnZ///ni0w/q9undxhv14WLri7EGMsWhGAEvny53obyAoUxxKEbAuC6UaD0tky95CNDv+Z+/Verms/3ff/TDr35nV+t/f1Rq8c1ns4RGd8zuR/3Er8xrjVr88El9+KndAo6N2hdcLN3gTt38xXXqSeO/6f/cPJ4ksVuAzbT4qJbmpa1S67hvPRcBjoXpkMY9Nt3aPtSd1wp4vbdP3PzcvXb7v4f+kseH7X5J9+khxpvGLuExyVHAhz+5zSD+1pCNAL3GflFmtXu+M52ne2Vlemz5ZJ5edV2xMcvpJVa2324/7//r9tu9Rt0LLrJehZdPZs23EvuN9eZ2nsTFspn0Yuu9fS3yW89GwHrfdvLmuO7pXrj56bCIW4d17+mO048b16bXae1CTX+34V7Q7ezWc9ZYx1/ue0l6sfTDZYo9UDYCbP/pPfNjd1bTPlbdnr1bLw+7jsbtsOzy/UbdCxbXjwedZ43tCt5L0pfZuJVhxBnWNLISYFa4bqu3K9/LJ9djf20X2arLAk4a9QV0L5jWbxu7V49J+gLMPqjdZqKSlYDzLUD/efnzR3dE7e2ZHWO3gNtu+3nbuNPTJekLMNtOP1IschFw8RjgXtz98fB0/6DYF3B2DOh12+kx4Kxx7xmb5CRWY85Fo++B8hFw6SxI7zS+NVem7gnTZRu1+G7/cn98Yn/pLKgnwJ0FbdqzoLPGVkAviYvVtreHjOh7oHwEdOfiJ6f0Px7P1rf96wB3+t4TcHod0N9x9EK/aey2gGMSF2t7uChIcUmci4AP//peqW96V8K/tw+/mJ3zL83T5lxen7q/fH/XLncqoNfoVMDuH3fqq+/cbuW8cbsLOiRxsdpMduOJ/9azEZDw9stIElwE7ClgGH1USFEUBVzGHi/iH4IpYAgtYPFtikR5CJgxFACGAsBQABgKAEMBYCgADAWAoQAwFACGAsBQABgKAEMBYCgADAWAoQAwFACGAsBQABgKAEMBYCgADAWAoQAwFACGAsAIC1CkBSVANly5UAAYCgBDAWAoAAwFgKEAMBQAhgLAUMBlktUXSYD5Roa1fTAwrTRzAePvEEzOJL6goVk87l/vzRcolClApSswioDdw8r+a77SpUQBal+4gNf7tf27uX0qUYDq/ZsomeSC+24L0GyWBQpQJ38SZRNc0NB1u/0GsOnh0qLO/qbJJregpWm/QWf3QAHjssktCAkniLrwKEk6qQUh4QSpTEB5B2F18WGKdEILXo/i/Vl0cuoWECucHGrgcYp8MgtCwslBAWDU4H8S5BNZEBJOjioEtF/9aynsLEhd+V+ChBILGgYvgMPCJaQSAdrAO9+mTAG+KTxr2b7zdcplCEhQJg/CJ5yXRQGJoQAwFACGArC8qYoC0vK2quh1UkAfCgBDAWAoAAwFYLlUVOxCKaAHBYChADAUAIYCwFwsKnKlFHDkck0UkAwKAFOTAPMr01cGpVCAf3ivOpruB163Q7/0SgG+4X3qOMwR0yrsz4hPC5eKgZrilhpFQDdLUrMtZ2TcUEkFCihzC6hIwGGOXlHHgJoEHIbnDqz/FOAfvf7rAAoAU6eAgmZJDpYUtdbEW0DGsySHK6pJQKxwAlAAGAoAQwFgahJQ5CzJmgSUOEvyWkExi432gUxpsyQrE1DeLMnaBCQONx0KAEMBYCgADAVguV5PxGopwEEBYCgADAWAoQAwFACGAsC8U0+8cinA8l45FBAZCgBDAWAoAAwFgKlOwEappZ2otxYJF513y4lWbxwBZl7MRi3NAJUiJmi8X01ZAuwUpe3icV/KFKXaBNhJem56XhmT9GoTwC1AMnVIBYdjQG++5IRw0alOQGlnQfUJSB1uIhQAZkQ1sQqOLaCISXpjiilVwHmULCfpzUhArHDToAAwFQoo6xuz6hNQ2DdmVSegtO8Lqk5Aad+YNaqYSBVzCxhbS0kCCvvGrAoFlPWNWTUKSB1uEhQAhgLAUAAYCsAytpQ4JVMABaChADAUAIYCwFAAGAoAU5yAbTuuYZ0kb3TGVxKlZl8Br/eq/Tq+3cPwJ76CeaNTloDX3/T7/PR/cfJGpywB6fNGhwLAFCfg9d4dBIY+bhfOG50CBairk48sG/3i851SdpbMpLzRKVDAH+5Nv14TYPv/68eTASqBeWPjU0iMokMErPUZ6OqaADs5dWP3VNkPSylSgBl3cvvlmoB1NzYo+4FZhQowO/hruyC99jfcAkRjngnQf64IMC/25qpOyRub8gSMo71hNPgrAhTgG7PWWxGFCajuZpxfHRGqjn07OvdZkiUKmJQut1mSpQnQp0Cvvx66vRAlb2TKE7CiAEwB7YLNuz/RZilmlmRxAvRGMGILKGeWZIECRlDQHLE6BZQzS9K3DPmyZ74FVCqgnFmStQooZpZktQJShwuFAsBQABgKwOJfhXjdFBC7hVRACghsIRWQAgJbSAWkgMAWUgEpILCFVMAaBQQUQQGShBQhXTgFJGgjEo8CwtuIxKOA8DYi8SggvI1IPAoIbyMSr0IBQTUUJeD5bi0ZTpqwGlBrot+oiHeHb1GAbzivvO1n8dwCBMP5fihvPo6nAMFwvnk3i0cKkAznnbdRKwoQDOef13xVwVounDihJciWHvM0dPdAAXLR6rsQm4eAjCfpzUPAeZSMJunNUkCscClLoAB0BaK1RxJQwCS9qgWUMEmvZgFFTFGqWUARk/RqFsAtIEIwz2PA2j3I9xgwpQDJ4qN9HpD7JL3KBaQOl7YACgAXQAHgAigAnJ8C0PkFq6eA9K3DQlGAWOuwUBQg1josVF0CJqanAHR6ufIpANI+IBIFSLYPiEQBku0DIlUlYHp2sfopABXBNxAFCEfwDUQBwhF8A1GAcATfQH4Zm+4XNrIcnCuRXOoNRPpQfvHY/ugnBUjF8R+Wsnu4faIAsTghA7M2t08UIBUnaGDWZpmjAJHcWQs47Hi63x6eGE4YmdxC7yDaWdDa/t09UIBQmIquAyhAPhwgdSECMjwIJz98ykQRSpfBLMlZC4gVDpGaAsCZsxaQ8SxJwKeJIkH8LsQyniU5BwFZzxGbg4CcZ0lKJk56U6+WLWAWAnKeJTkPARnPkpyJgNThQHkFolEAOBoFgKPNTIB02oQDjCggTrx5CRDPSgHorJMjzkpAhKQUgE46NSYFgGPOSUCcnBOjUgA46owExEo5LS4FgOPOR0C8jJMiUwA48mwExEw4JfZcxgXFzTch+kzGBcVOFx5/JqMiZiYgu3FB8bMFZ5jFFpAiWWiOGYwLSjQXITBL/eOCkmUKE137dUDSqTghyeoWkHwmlP/cq9gCIJP0oBPRPBMn3gIuTNJT8oiUOonxJda9CyoACgAzl5tx2TKTm3H5MotbETkzj5txGcMtAMwMbsblTf034zIHdh1AWkACZNJ4FhUzeNTCA5uEQAGCTUKgAMEmIVCAYJMQKECwSQgUINgkBAoQbBICBQg2CYECBJsQSSgADAWAoQAwFACGAsBQABgKAEMBYCgADAWAoQAwFAAmkYBGqcXj2IXtGOyBkV+Xef7F0HDtM7Y+dfgEDqnakkaAmdG0HfvOdw96yUYtx4d/vR8cL3+KqWF0HT6BQ6p2JBHwer8yFY4s7vluvR+ehXaB7ZUJCye4wa2b0Z00OvA+oOqWdMeA0QIc41fUrVoNDdY+w7OTxgc+NvHawRnSCWj8atv4vPWxAr5+HL+wT+ADXlVbUgnYeh6gBsdfX1563Pt266fPWuopwK9qS8pd0OCY6rds/Y5mmQjwrNqS8DrA4437rkl57IIC1v/4AprjybE7BI5Zuhn5Tg7B4xyExwduqwno/zRbgHvjo9/MYSLOaEaG9j0N9RLgX7UlzS5oo3f/vRlm13m+816TxvaT74WYh4CAqi2JjgEbvbNYj1y2cVNMovST1y0Rn8AhVVt4Mw4MBYChADAUAIYCwFAAGAoAQwFgKAAMBYChADAUAIYCwFAAGAoAQwFgKAAMBYChADAUAIYCwFAAGAoAQwFgKAAMBYChADAUAIYCwFAAmNoEuFHiYUP1IdQmwLDxHqQPpEIBoXNVMNQnwGs6LJ76BHjOyEdTnYCydkD1CShsB1SfgMJ2QNUJ6H7weI0uZDSVCSgPCgBDAWAoAAwFgKEAMBQAhgLAUAAYCgBDAWAoAAwFgKEAMBQAhgLAUAAYCgBDAWAoAAwFgKEAMBQAhgLA/B+B8mdqgM3LEgAAAABJRU5ErkJggg==" style="display: block; margin: auto;" /></p>
+<pre><code>#&gt;           zk_i prob_zk_i
+#&gt; 1  -3.30630142   0.00000
+#&gt; 2  -3.19800956   0.00000
+#&gt; 3  -3.08971769   0.00000
+#&gt; 4  -2.98142583   0.00000
+#&gt; 5  -2.87313396   0.00000
+#&gt; 6  -2.76484209   0.00000
+#&gt; 7  -2.65655023   0.00000
+#&gt; 8  -2.54825836   0.00000
+#&gt; 9  -2.43996650   0.00000
+#&gt; 10 -2.33167463   0.00000
+#&gt; 11 -2.22338277   0.00000
+#&gt; 12 -2.11509090   0.00000
+#&gt; 13 -2.00679903   0.00001
+#&gt; 14 -1.89850717   0.00005
+#&gt; 15 -1.79021530   0.00015
+#&gt; 16 -1.68192344   0.00046
+#&gt; 17 -1.57363157   0.00129
+#&gt; 18 -1.46533971   0.00339
+#&gt; 19 -1.35704784   0.00827
+#&gt; 20 -1.24875597   0.01873
+#&gt; 21 -1.14046411   0.03945
+#&gt; 22 -1.03217224   0.07725
+#&gt; 23 -0.92388038   0.14064
+#&gt; 24 -0.81558851   0.23816
+#&gt; 25 -0.70729664   0.37517
+#&gt; 26 -0.59900478   0.54983
+#&gt; 27 -0.49071291   0.74979
+#&gt; 28 -0.38242105   0.95140
+#&gt; 29 -0.27412918   1.12336
+#&gt; 30 -0.16583732   1.23423
+#&gt; 31 -0.05754545   1.26163
+#&gt; 32  0.05074642   1.19985
+#&gt; 33  0.15903828   1.06142
+#&gt; 34  0.26733015   0.87325
+#&gt; 35  0.37562201   0.66804
+#&gt; 36  0.48391388   0.47508
+#&gt; 37  0.59220574   0.31400
+#&gt; 38  0.70049761   0.19283
+#&gt; 39  0.80878948   0.11000
+#&gt; 40  0.91708134   0.05827
+#&gt; 41  1.02537321   0.02866
+#&gt; 42  1.13366507   0.01308
+#&gt; 43  1.24195694   0.00554
+#&gt; 44  1.35024881   0.00218
+#&gt; 45  1.45854067   0.00079
+#&gt; 46  1.56683254   0.00027
+#&gt; 47  1.67512440   0.00008
+#&gt; 48  1.78341627   0.00002
+#&gt; 49  1.89170813   0.00001
+#&gt; 50  2.00000000   0.00000</code></pre>
+<p>The plot of the posterior density becomes smoother as the value of
+<code>n</code> increases.</p>
+<p>The <code>bme_predict</code> function accepts the same arguments as
+the <code>prob_zk</code> function, with the addition of a
+<code>type</code> argument, which specifies the preferred type of
+prediction (either the posterior mean or mode). Using the data provided,
+we can predict the mode and mean of the posterior density at the
+prediction location location by:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># posterior mode</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">bme_predict</span>(x, ch, cs, zh, a, b, model, nugget, sill, range, <span class="at">type =</span> <span class="st">&quot;mode&quot;</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;     latitude longitude    mode</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; 228  40.3000 -111.2550 -0.0575</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; 229  40.4447 -111.7075  0.2673</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; 230  40.7908 -111.4078 -0.0575</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; 231  37.7064 -112.1456 -0.4907</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; 232  40.9139 -111.3983 -0.1658</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co"># posterior mean</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="fu">bme_predict</span>(x, ch, cs, zh, a, b, model, nugget, sill, range, <span class="at">type =</span> <span class="st">&quot;mean&quot;</span>)</span>
+<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#&gt;     latitude longitude    mean variance</span></span>
+<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#&gt; 228  40.3000 -111.2550 -0.1018   0.2071</span></span>
+<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#&gt; 229  40.4447 -111.7075  0.1901   0.0893</span></span>
+<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#&gt; 230  40.7908 -111.4078 -0.0627   0.1878</span></span>
+<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#&gt; 231  37.7064 -112.1456 -0.4569   0.1515</span></span>
+<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#&gt; 232  40.9139 -111.3983 -0.1349   0.2049</span></span></code></pre></div>
+</div>
+<div id="leave-one-out-cross-validation-loocv-for-model-evaluation" class="section level3">
+<h3>Leave-One-Out Cross-Validation (LOOCV) for Model Evaluation</h3>
+<p>LOOCV is used to assess prediction accuracy by successively removing
+one hard data point at a time—where true values are known—and predicting
+its value using the remaining hard data and all of the soft-interval
+data. A variogram model is fitted to the reduced dataset, and the
+predicted value at the excluded location is compared to its observed
+value. Soft data locations are excluded from the validation set, as
+their true values are unobservable.</p>
+<p>The <code>bme_cv</code> function performs LOOCV for at hard data
+locations and returns key performance metrics, including <strong>mean
+error (ME)</strong>, <strong>mean absolute error (MAE)</strong>, and
+<strong>root mean squared error (RMSE)</strong> of the prediction
+residuals. These statistics offer insight into the model’s bias, average
+prediction accuracy, and the variability of prediction errors,
+respectively.</p>
+<p>Functionally, <code>bme_cv</code> accepts similar arguments as the
+<code>bme_predict</code> function. Given the necessary data inputs and
+variogram parameters, LOOCV can be applied to evaluate the posterior
+mean predictions as follows:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">bme_cv</span>(ch, cs, zh, a, b, model, nugget, sill, range, <span class="at">type =</span> <span class="st">&quot;mean&quot;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#&gt; $results</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt;     coord.1 coord.2   observed   mean   variance residual fold</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#&gt; 1    40.44 -112.24  0.09696012 -0.1742   0.2811   0.2712    1</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; 2    39.94 -112.41  0.12258678 -0.3519   0.2940   0.4745    2</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#&gt; 3    37.51 -113.40 -0.02302358  0.0162   0.2168  -0.0392    3</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#&gt; 4    37.49 -113.85  0.50354362 -0.1098   0.2483   0.6133    4</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#&gt; 5    39.31 -109.53 -0.68611327 -0.3871   0.3520  -0.2990    5</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#&gt; 6    40.72 -109.54 -0.53000397 -0.6945   0.1586   0.1645    6</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; 7    40.61 -109.89 -0.71923519 -0.8164   0.2002   0.0972    7</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#&gt; 8    40.91 -109.96 -1.31503404 -1.2461   0.1879  -0.0689    8</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#&gt; 9    40.74 -109.67 -0.94879597 -0.6540   0.1480  -0.2948    9</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#&gt; 10   40.92 -110.19 -1.39798035 -1.0320   0.2295  -0.3660   10</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt; 11   40.95 -110.48 -1.21900906 -1.0311   0.0588  -0.1879   11</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; 12   40.60 -110.43 -1.24787225 -0.9276   0.1412  -0.3203   12</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#&gt; 13   40.55 -110.69 -0.55027484 -0.6074   0.1044   0.0571   13</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#&gt; 14   40.91 -110.50 -1.06708711 -1.0355   0.0633  -0.0316   14</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#&gt; 15   40.72 -110.47 -1.14044998 -1.0730   0.1463  -0.0674   15</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#&gt; 16   40.58 -110.59 -0.94551554 -0.6273   0.1167  -0.3182   16</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#&gt; 17   40.86 -110.80 -0.83840015 -0.6303   0.1204  -0.2081   17</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a><span class="co">#&gt; 18   40.77 -110.01 -1.24671792 -1.2210   0.1835  -0.0257   18</span></span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a><span class="co">#&gt; 19   40.80 -110.88 -0.65036211 -0.7069   0.1086   0.0565   19</span></span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a><span class="co">#&gt; 20   40.68 -110.95 -0.37127802 -0.5523   0.1481   0.1810   20</span></span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a><span class="co">#&gt; 21   39.89 -110.75 -0.80367306 -0.4423   0.2055  -0.3614   21</span></span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a><span class="co">#&gt; 22   39.96 -110.99 -0.54230365 -0.3535   0.1659  -0.1888   22</span></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a><span class="co">#&gt; 23   41.38 -111.94  0.94099563  1.3172   0.0495  -0.3762   23</span></span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a><span class="co">#&gt; 24   41.31 -111.45  0.24796667  0.0396   0.2536   0.2084   24</span></span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a><span class="co">#&gt; 25   41.41 -111.83  0.47642403  0.8217   0.1410  -0.3453   25</span></span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a><span class="co">#&gt; 26   41.38 -111.92  1.25233814  0.7392   0.0298   0.5131   26</span></span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a><span class="co">#&gt; 27   41.90 -111.63  0.61655171  0.0708   0.2713   0.5458   27</span></span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a><span class="co">#&gt; 28   41.68 -111.42  0.18443361 -0.0449   0.2339   0.2293   28</span></span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a><span class="co">#&gt; 29   41.41 -111.54  0.11223798  0.1876   0.0916  -0.0754   29</span></span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a><span class="co">#&gt; 30   41.47 -111.50  0.10561343  0.1456   0.0924  -0.0400   30</span></span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a><span class="co">#&gt; 31   40.85 -111.05 -0.10690304 -0.3928   0.0506   0.2859   31</span></span>
+<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a><span class="co">#&gt; 32   40.89 -111.07 -0.29946212 -0.2690   0.0496  -0.0305   32</span></span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a><span class="co">#&gt; 33   40.16 -111.21  0.00344554 -0.1073   0.2126   0.1107   33</span></span>
+<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a><span class="co">#&gt; 34   40.99 -111.82  0.78786432  0.1035   0.1912   0.6844   34</span></span>
+<span id="cb10-39"><a href="#cb10-39" tabindex="-1"></a><span class="co">#&gt; 35   40.43 -111.62  0.39822325  0.1897   0.2016   0.2085   35</span></span>
+<span id="cb10-40"><a href="#cb10-40" tabindex="-1"></a><span class="co">#&gt; 36   40.36 -111.09 -0.24414027 -0.1348   0.1680  -0.1093   36</span></span>
+<span id="cb10-41"><a href="#cb10-41" tabindex="-1"></a><span class="co">#&gt; 37   40.61 -111.10 -0.52669066 -0.2962   0.1611  -0.2305   37</span></span>
+<span id="cb10-42"><a href="#cb10-42" tabindex="-1"></a><span class="co">#&gt; 38   40.76 -111.63  0.14568497  0.3546   0.1824  -0.2089   38</span></span>
+<span id="cb10-43"><a href="#cb10-43" tabindex="-1"></a><span class="co">#&gt; 39   40.79 -111.12 -0.10923301 -0.2849   0.1393   0.1757   39</span></span>
+<span id="cb10-44"><a href="#cb10-44" tabindex="-1"></a><span class="co">#&gt; 40   39.68 -111.32 -0.08382941 -0.3556   0.1434   0.2718   40</span></span>
+<span id="cb10-45"><a href="#cb10-45" tabindex="-1"></a><span class="co">#&gt; 41   39.31 -111.43 -0.78984433 -0.4174   0.1735  -0.3724   41</span></span>
+<span id="cb10-46"><a href="#cb10-46" tabindex="-1"></a><span class="co">#&gt; 42   39.14 -111.56 -0.38648680 -0.5594   0.1321   0.1729   42</span></span>
+<span id="cb10-47"><a href="#cb10-47" tabindex="-1"></a><span class="co">#&gt; 43   39.05 -111.47 -0.57739062 -0.6028   0.1091   0.0254   43</span></span>
+<span id="cb10-48"><a href="#cb10-48" tabindex="-1"></a><span class="co">#&gt; 44   39.87 -111.28 -0.22947205 -0.0083   0.0417  -0.2212   44</span></span>
+<span id="cb10-49"><a href="#cb10-49" tabindex="-1"></a><span class="co">#&gt; 45   39.89 -111.25 -0.03805984 -0.2372   0.0346   0.1991   45</span></span>
+<span id="cb10-50"><a href="#cb10-50" tabindex="-1"></a><span class="co">#&gt; 46   39.45 -111.27 -0.42606551 -0.5614   0.1873   0.1353   46</span></span>
+<span id="cb10-51"><a href="#cb10-51" tabindex="-1"></a><span class="co">#&gt; 47   39.13 -111.44 -0.52777166 -0.5837   0.1149   0.0559   47</span></span>
+<span id="cb10-52"><a href="#cb10-52" tabindex="-1"></a><span class="co">#&gt; 48   39.01 -111.58 -0.81486819 -0.4709   0.1300  -0.3440   48</span></span>
+<span id="cb10-53"><a href="#cb10-53" tabindex="-1"></a><span class="co">#&gt; 49   39.93 -111.63  0.06849776 -0.1495   0.1982   0.2180   49</span></span>
+<span id="cb10-54"><a href="#cb10-54" tabindex="-1"></a><span class="co">#&gt; 50   38.77 -111.68 -0.68746363 -0.4619   0.0430  -0.2256   50</span></span>
+<span id="cb10-55"><a href="#cb10-55" tabindex="-1"></a><span class="co">#&gt; 51   38.68 -111.60 -1.04793061 -0.7220   0.1395  -0.3259   51</span></span>
+<span id="cb10-56"><a href="#cb10-56" tabindex="-1"></a><span class="co">#&gt; 52   38.21 -111.48 -1.40848147 -0.7562   0.2956  -0.6523   52</span></span>
+<span id="cb10-57"><a href="#cb10-57" tabindex="-1"></a><span class="co">#&gt; 53   38.80 -111.68 -0.43759896 -0.6781   0.0433   0.2405   53</span></span>
+<span id="cb10-58"><a href="#cb10-58" tabindex="-1"></a><span class="co">#&gt; 54   37.84 -111.88 -0.73581358 -0.7046   0.3145  -0.0312   54</span></span>
+<span id="cb10-59"><a href="#cb10-59" tabindex="-1"></a><span class="co">#&gt; 55   38.51 -112.02 -0.90807705 -0.7549   0.2387  -0.1532   55</span></span>
+<span id="cb10-60"><a href="#cb10-60" tabindex="-1"></a><span class="co">#&gt; 56   38.48 -112.39 -0.67118202 -0.8935   0.2731   0.2223   56</span></span>
+<span id="cb10-61"><a href="#cb10-61" tabindex="-1"></a><span class="co">#&gt; 57   38.30 -112.36 -0.76527983 -0.4291   0.1105  -0.3362   57</span></span>
+<span id="cb10-62"><a href="#cb10-62" tabindex="-1"></a><span class="co">#&gt; 58   38.30 -112.44 -0.51835705 -0.4790   0.0702  -0.0394   58</span></span>
+<span id="cb10-63"><a href="#cb10-63" tabindex="-1"></a><span class="co">#&gt; 59   38.88 -112.25 -0.24704072 -0.5178   0.2858   0.2708   59</span></span>
+<span id="cb10-64"><a href="#cb10-64" tabindex="-1"></a><span class="co">#&gt; 60   37.58 -112.90 -0.42302609 -0.2958   0.0683  -0.1272   60</span></span>
+<span id="cb10-65"><a href="#cb10-65" tabindex="-1"></a><span class="co">#&gt; 61   37.49 -112.58  0.00732065  0.0269   0.0663  -0.0196   61</span></span>
+<span id="cb10-66"><a href="#cb10-66" tabindex="-1"></a><span class="co">#&gt; 62   37.49 -112.51  0.02427501  0.0493   0.0417  -0.0250   62</span></span>
+<span id="cb10-67"><a href="#cb10-67" tabindex="-1"></a><span class="co">#&gt; 63   37.66 -112.74 -0.76376457 -0.3283   0.1760  -0.4355   63</span></span>
+<span id="cb10-68"><a href="#cb10-68" tabindex="-1"></a><span class="co">#&gt; 64   37.57 -112.84 -0.28791382 -0.4297   0.0607   0.1418   64</span></span>
+<span id="cb10-69"><a href="#cb10-69" tabindex="-1"></a><span class="co">#&gt; 65   37.53 -113.05 -0.07280592 -0.2826   0.1556   0.2098   65</span></span>
+<span id="cb10-70"><a href="#cb10-70" tabindex="-1"></a><span class="co">#&gt; 66   38.48 -109.27 -0.90950964 -0.4185   0.2903  -0.4910   66</span></span>
+<span id="cb10-71"><a href="#cb10-71" tabindex="-1"></a><span class="co">#&gt; 67   37.81 -109.49 -0.39635792 -0.5006   0.3202   0.1042   67</span></span>
+<span id="cb10-72"><a href="#cb10-72" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb10-73"><a href="#cb10-73" tabindex="-1"></a><span class="co">#&gt; $metrics</span></span>
+<span id="cb10-74"><a href="#cb10-74" tabindex="-1"></a><span class="co">#&gt;       ME    MAE   RMSE</span></span>
+<span id="cb10-75"><a href="#cb10-75" tabindex="-1"></a><span class="co">#&gt; 1 -0.0127 0.2259 0.2769</span></span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
