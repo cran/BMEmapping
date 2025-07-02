@@ -24,17 +24,19 @@
 # ============================================================================
 bme_estimate <- function(x, ch, cs, zh, a, b, model, nugget, sill, range,
                          nsmax = 5, nhmax = 5, n = 50,
-                         zk_range = range(zh, a, b, -2, 2)) {
-
-  x <- matrix(c(x), ncol = 2)
+                         zk_range = extended_range(zh, a, b)) {
+  #x <- matrix(c(x), ncol = 2)
   nk <- nrow(x)
 
   # set up container for estimates: mean, variance, mode
   df <- matrix(NA, ncol = 3, nrow = nk)
 
   for (i in 1:nk) {
-    d <- prob_zk(x[i,], ch, cs, zh, a, b, model, nugget, sill, range, nsmax = 5,
-                 nhmax = 5, n = 50, zk_range = range(zh, a, b, -2, 2))
+    d <- prob_zk(
+      x = x[i, ], ch = ch, cs = cs, zh = zh, a = a, b = b,
+      model = model, nugget = nugget, sill = sill, range = range,
+      nsmax = nsmax, nhmax = nhmax, n = n, zk_range = zk_range
+    )
 
     delta <- d[2, 1] - d[1, 1]
 

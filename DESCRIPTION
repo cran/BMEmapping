@@ -1,7 +1,7 @@
 Package: BMEmapping
 Type: Package
 Title: Spatial Interpolation using Bayesian Maximum Entropy (BME)
-Version: 0.3.0
+Version: 1.0.0
 Authors@R: c(
     person("Kinspride", "Duah", email = "kinspride2020@gmail.com", 
     role = c("aut", "cre", "cph"), comment = c(ORCID = "0009-0004-3990-7985")),
@@ -28,9 +28,9 @@ Imports: mvtnorm
 Depends: R (>= 3.5)
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2025-05-10 19:13:50 UTC; kwaku
+Packaged: 2025-07-02 01:34:50 UTC; kwaku
 Author: Kinspride Duah [aut, cre, cph] (ORCID:
     <https://orcid.org/0009-0004-3990-7985>),
   Yan Sun [aut]
 Repository: CRAN
-Date/Publication: 2025-05-13 08:40:13 UTC
+Date/Publication: 2025-07-02 02:40:02 UTC
