@@ -35,6 +35,12 @@ a <- utsnowload[68:227, c("lower")]
 # upper bounds
 b <- utsnowload[68:227, c("upper")] 
 
+## -----------------------------------------------------------------------------
+# create a data object 
+data_object <- bme_map(ch, cs, zh, a , b)
+
+## ----ig.width = 6, fig.height = 6, fig.align='center'-------------------------
+plot(data_object)
 
 ## -----------------------------------------------------------------------------
 # variogram model and parameters
@@ -44,17 +50,20 @@ sill <- 0.3639
 range <- 1.0787
 
 ## ----fig.width = 4, fig.height = 4.5, fig.align='center'----------------------
-prob_zk(x[1,], ch, cs, zh, a, b, model, nugget, sill, range,  plot = TRUE)
+df <- prob_zk(x[1,], data_object, model, nugget, sill, range)
+head(df)
+
+plot(df)
 
 ## -----------------------------------------------------------------------------
 # posterior mode
-bme_predict(x, ch, cs, zh, a, b, model, nugget, sill, range, type = "mode")
-
+bme_predict(x, data_object, model, nugget, sill, range, type = "mode")
+ 
 # posterior mean
-bme_predict(x, ch, cs, zh, a, b, model, nugget, sill, range, type = "mean")
+bme_predict(x, data_object, model, nugget, sill, range, type = "mean")
 
 ## ----eval=FALSE---------------------------------------------------------------
-# bme_cv(ch, cs, zh, a, b, model, nugget, sill, range, type = "mean")
+# bme_cv(data_object, model, nugget, sill, range, type = "mean")
 # 
 # #> $results
 # #>    latitude longitude    observed    mean variance residual fold
@@ -125,8 +134,4 @@ bme_predict(x, ch, cs, zh, a, b, model, nugget, sill, range, type = "mean")
 # #> 65    37.53   -113.05 -0.07280592 -0.3232   0.2927   0.2504   65
 # #> 66    38.48   -109.27 -0.90950964 -0.3653   0.3869  -0.5442   66
 # #> 67    37.81   -109.49 -0.39635792 -0.3522   0.3680  -0.0442   67
-# #>
-# #> $metrics
-# #> ME    MAE   RMSE
-# #> 1 -0.0102 0.2378 0.2953
 
