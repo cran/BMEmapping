@@ -1,7 +1,7 @@
-e209713418e843199643c5a1f0ce037b *DESCRIPTION
+63393a550bca2270036558aea6f662d3 *DESCRIPTION
 04b4fe4ffb76a5c1e237a88c984d2877 *LICENSE
 f6b4ad14bfb3c1cd8682c7c20448250d *NAMESPACE
-2773ace89a77da2f377c9318b8a23a59 *NEWS.md
+4c40425f75a01d157bd7fd84c50e256c *NEWS.md
 6a07579e9468cb4ab39b96c6e301950c *R/bme_cv.R
 fc15e6ec1968f5771deb24bea9ae07e6 *R/bme_estimate.R
 1eb2ed9774028cc9a22e4497f557a26b *R/bme_map.R
@@ -17,9 +17,9 @@ bd2a3eac3536887b98fca5847eed5a8e *R/check_x.R
 6f2316266feea39e7393ea95c6c7fe4d *R/data.R
 f8f6be1f612f48de2a8c8e36708efc11 *R/distant.R
 d02c38d679ad7053eb8727e0470b0f04 *R/exponential.R
-74d82e1af86860f2f5ef30dd8b56dab0 *R/extended_range.R
+d85d2284b74350606f6e96a4fd970956 *R/extended_range.R
 93ed5e98876c4ee8bd0d0ec31773c6c4 *R/gaussian.R
-a2cf8cad20258b7df548ca2188e6f371 *R/plot.BMEmapping.R
+e35b9007d617cae3d96dd3c842fae323 *R/plot.BMEmapping.R
 754267ec1c29b99a3d93daffb30fd57d *R/prob_zk.R
 e4c8add67eb3f684622e91a638c4888b *R/spherical.R
 a91846864c9ae83211d96fd29f22e733 *R/summary.BMEmapping.R
@@ -31,7 +31,7 @@ a0c8e8d894b355fc5a8368550940605a *README.md
 bfdb75fcea6436cce4173f07bd4621ae *data/utsnowload.rda
 b0a70a6933b67a223992f4d40305623e *inst/doc/Introduction_to_BMEmapping.R
 635d7373ba8e62aa51028f1f7f6cb33a *inst/doc/Introduction_to_BMEmapping.Rmd
-4fe3a28879f096778efdbea9106d91e3 *inst/doc/Introduction_to_BMEmapping.html
+d7414d0544e80baec1fb2458543cd606 *inst/doc/Introduction_to_BMEmapping.html
 5ba7f2afebec269b42409626701fe6dd *man/bme_cv.Rd
 6cb9acfed1dc856cfaf82636ceffe187 *man/bme_map.Rd
 6634c4ff93217ddc531f5978c2a1d597 *man/bme_predict.Rd
@@ -42,6 +42,8 @@ d9d43a11c8667ae78744316d3e175b71 *man/plot.BMEmapping.Rd
 e79e54b2a06751fc760a27c94cd7bdbb *man/summary.BMEmapping.Rd
 9b3a873a8593043786ce26eb50cd5ad5 *man/utahsnowload.Rd
 26ea4dcc78165cc7633a1f26f6816296 *tests/testthat.R
+b5b88cf029ff3d300b4e62fd65d2e0a2 *tests/testthat/test-bme_cv.R
 9e479a9fff8abe032ab878d0a1d104b9 *tests/testthat/test-bme_predict.R
 a511aa2e5cab4987e3e4ad6c041dbe7f *tests/testthat/test-covmat.R
+c4acdccb00b82a1c3d53224d1f75d860 *tests/testthat/test-prob_zk.R
 635d7373ba8e62aa51028f1f7f6cb33a *vignettes/Introduction_to_BMEmapping.Rmd
